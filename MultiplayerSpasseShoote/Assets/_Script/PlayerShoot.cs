@@ -31,7 +31,7 @@ public class PlayerShoot : MonoBehaviour
     private void Fire()
     {
         GameObject _bullet = Instantiate(bullet, spawnBullet.position, spawnBullet.rotation);
-        _bullet.GetComponent<Rigidbody2D>().AddForce(spawnBullet.up * 100);
+        _bullet.GetComponent<Player_Bullet>().ID_shooter = PV.ViewID;
     }
 
 }

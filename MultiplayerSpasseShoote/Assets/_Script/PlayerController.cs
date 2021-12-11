@@ -26,7 +26,14 @@ public class PlayerController : MonoBehaviour
         if (PV.IsMine)
         {
             rb2D.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * speed, Input.GetAxisRaw("Vertical") * speed);
-            //transform.Rotate(new Vector3(0, 0, Input.GetAxis("Mouse X")) * Time.deltaTime);
+            PlayerLookAtMouse();
         }
+    }
+
+    private void PlayerLookAtMouse()
+    {
+        var dir = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0,0, angle +90);
     }
 }
