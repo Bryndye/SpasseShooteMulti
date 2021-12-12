@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4373286636224042702}
   - component: {fileID: 4373286636224042701}
+  - component: {fileID: 4373286635548488690}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -44,4 +45,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 2806616219948364317, guid: 188f0eafbbdaea24faf988e71765cabc, type: 3}
-  playerUI: {fileID: 7880593414058152943, guid: 2a90805f0b962ad4589bee2c512bf04b, type: 3}
+  playerUIPrefab: {fileID: 7880593414058152943, guid: 2a90805f0b962ad4589bee2c512bf04b, type: 3}
+  Canvas: {fileID: 0}
+  PlayersInRoom: []
+  PlayersUIInRoom: []
+--- !u!114 &4373286635548488690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4373286636224042700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

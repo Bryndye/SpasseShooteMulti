@@ -5,17 +5,24 @@ using UnityEngine;
 
 public class Player_Bullet : MonoBehaviour
 {
+    PhotonView PV;
     Rigidbody2D rb;
     [HideInInspector] public int ID_shooter;
 
     [Header("Parametre Basic")]
     public int Damage = 10;
     [SerializeField] float mySpeed = 100;
+    [SerializeField] float autoDestroyTime = 20;
 
     private void Awake()
     {
+        PV = GetComponent<PhotonView>();
         rb = GetComponent<Rigidbody2D>();
+        if(PV.IsMine)
+            Invoke(nameof(AutoDelete), autoDestroyTime);
     }
+
+    private void AutoDelete() => PhotonNetwork.Destroy(PV);
 
     private void Start()
     {
@@ -24,13 +31,19 @@ public class Player_Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!PV.IsMine)
+        {
+            return;
+        }
         if (collision.TryGetComponent(out PlayerLife _life))
         {
             if (_life.TryGetComponent(out PhotonView _pv))
             {
                 if (ID_shooter != _pv.ViewID)
                 {
-                    _life.TakeDamage(Damage);
+                    _pv.RPC(nameof(_life.TakeDamage), RpcTarget.AllBufferedViaServer, Damage);
+                    //_life.TakeDamage(Damage);
+                    //PhotonNetwork.Destroy(PV); CAN'T DESTROY THIS GAMEOBJECT BUT IDK WHY
                 }
             }
         }

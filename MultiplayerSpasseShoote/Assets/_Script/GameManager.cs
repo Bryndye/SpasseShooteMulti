@@ -11,10 +11,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     static public GameManager Instance;
     PhotonView PV;
 
+    [Header("Prefabs/ Basics")]
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject playerUIPrefab;
     [SerializeField] private Transform Canvas;
+    [SerializeField] private Transform[] spawnsPlayer;
 
+    [Header("Lists Players items")]
     public List<PlayerLife> PlayersInRoom;
     public List<MyPlayerUI> PlayersUIInRoom;
 
@@ -33,13 +36,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             PV.RPC(nameof(CreateLifePlayerUI), RpcTarget.AllBufferedViaServer, PhotonNetwork.MasterClient.NickName);
         }
+        InstantiatePlayerPrefab();
 
-        GameObject _player = PhotonNetwork.Instantiate("Prefab/"+playerPrefab.name, Vector3.zero, Quaternion.identity);
-        //if (!PhotonNetwork.IsMasterClient)
-        //{
-        //    //Can't send script by RPC
-        //    PV.RPC(nameof(AddPlayerPrefabToList), RpcTarget.AllBufferedViaServer, _player.GetComponent<PlayerLife>());
-        //}
+        //TEMPORAIRE
+        if(PhotonNetwork.IsMasterClient)
+            PV.RPC(nameof(ItemSpawn), RpcTarget.AllBufferedViaServer);
     }
 
     private void Update()
@@ -47,11 +48,22 @@ public class GameManager : MonoBehaviourPunCallbacks
         UpdateUIPlayers();
     }
 
-    [PunRPC]
-    private void AddPlayerPrefabToList(PlayerLife _playerLife)
+
+    #region PlayerPrefab Start
+    private void InstantiatePlayerPrefab()
     {
-        PlayersInRoom.Add(_playerLife);
+        GameObject _player = PhotonNetwork.Instantiate("Prefab/" + playerPrefab.name, Vector3.zero, Quaternion.identity);
+
+        PV.RPC(nameof(AddPlayerPrefabToList), RpcTarget.AllBufferedViaServer, _player.GetComponent<PhotonView>().ViewID);
     }
+
+    [PunRPC]
+    private void AddPlayerPrefabToList(int _ID)
+    {
+        PlayersInRoom.Add(PhotonView.Find(_ID).GetComponent<PlayerLife>());
+    }
+
+    #endregion
 
     #region UI
     [PunRPC]
@@ -69,14 +81,22 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PlayersInRoom.Count > 0)
         {
             //Update all life bar for each players into the room
-            for (int i = 0; i < PlayersUIInRoom.Count; i++)
+            for (int i = 0; i < PlayersInRoom.Count; i++)
             {
-                PlayersUIInRoom[i].PlayerLife.fillAmount = (float)(PlayersInRoom[i].myLife / PlayersInRoom[i].myLifeMax);
+                PlayersUIInRoom[i].PlayerLife.fillAmount = (float)PlayersInRoom[i].myLife / PlayersInRoom[i].myLifeMax;
             }
         }
     }
     #endregion
 
+    #region Events
+    [PunRPC]
+    private void ItemSpawn()
+    {
+        //TEMPORAIRE
+        PhotonNetwork.Instantiate("Prefab/Item_Weapon", spawnsPlayer[0].position, Quaternion.identity);
+    }
+    #endregion
 
     #region Photon CallBacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -98,6 +118,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (PlayersUIInRoom[i].PlayerName.text == otherPlayer.NickName)
             {
+                Destroy(PlayersInRoom[i].gameObject);
+                PlayersInRoom.Remove(PlayersInRoom[i]);
+
                 Destroy(PlayersUIInRoom[i].gameObject);
                 PlayersUIInRoom.Remove(PlayersUIInRoom[i]);
             }

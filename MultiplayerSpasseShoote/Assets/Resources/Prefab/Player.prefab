@@ -257,7 +257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d77266b0e218d07438f1c97b61ac32e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 5
 --- !u!114 &2923924027155251061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,7 +270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7c8ffa6a07b0d842830445c564debcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 8963332845460435145, guid: d2f53791319f7f54c98b6fbfa4c28377, type: 3}
+  MyWeapon: {fileID: 11400000, guid: 8a167c241f613b5449f66bfd373f6e63, type: 2}
   spawnBullet: {fileID: 2806616218132582062}
 --- !u!114 &1519741838823351771
 MonoBehaviour:

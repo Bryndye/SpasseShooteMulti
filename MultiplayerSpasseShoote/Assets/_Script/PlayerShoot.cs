@@ -7,8 +7,10 @@ public class PlayerShoot : MonoBehaviour
 {
     PhotonView PV;
 
-    [SerializeField] GameObject bullet;
+    public WeaponScriptable MyWeapon;
     [SerializeField] Transform spawnBullet;
+
+    float timeShooting;
 
     private void Awake()
     {
@@ -19,10 +21,15 @@ public class PlayerShoot : MonoBehaviour
     {
         if (PV.IsMine)
         {
-            if (Input.GetMouseButtonDown(0))
+            timeShooting += Time.deltaTime;
+
+            if (Input.GetAxis("Fire1") > 0)
             {
                 //tir RPc
-                PV.RPC("Fire", RpcTarget.All);
+                if (timeShooting >= MyWeapon.FireRate)
+                {
+                    PV.RPC("Fire", RpcTarget.All);
+                }
             }
         }
     }
@@ -30,8 +37,10 @@ public class PlayerShoot : MonoBehaviour
     [PunRPC]
     private void Fire()
     {
-        GameObject _bullet = Instantiate(bullet, spawnBullet.position, spawnBullet.rotation);
+        GameObject _bullet = Instantiate(MyWeapon.Bullet, spawnBullet.position, spawnBullet.rotation);
         _bullet.GetComponent<Player_Bullet>().ID_shooter = PV.ViewID;
+
+        timeShooting = 0;
     }
 
 }
