@@ -9,65 +9,100 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     //GameManager Custom
     static public GameManager Instance;
+    PhotonView PV;
 
     [SerializeField] private GameObject playerPrefab;
-    [SerializeField] private GameObject playerUI;
+    [SerializeField] private GameObject playerUIPrefab;
     [SerializeField] private Transform Canvas;
 
     public List<PlayerLife> PlayersInRoom;
+    public List<MyPlayerUI> PlayersUIInRoom;
 
     private void Awake()
     {
         Instance = this;
+        PV = GetComponent<PhotonView>();
     }
 
     private void Start()
     {
-        //jouer co ?
-        //Verifier playerprefab != null
+        if (!PhotonNetwork.IsConnected)
+            return;
+
         if (PhotonNetwork.IsMasterClient)
         {
-            CreateLifePlayerUI();
+            PV.RPC(nameof(CreateLifePlayerUI), RpcTarget.AllBufferedViaServer, PhotonNetwork.MasterClient.NickName);
         }
-        else
-        {
-            for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-            {
-                CreateLifePlayerUI();
-            }
-        }
-        PhotonNetwork.Instantiate("Prefab/"+playerPrefab.name, Vector3.zero, Quaternion.identity);
+
+        GameObject _player = PhotonNetwork.Instantiate("Prefab/"+playerPrefab.name, Vector3.zero, Quaternion.identity);
+        //if (!PhotonNetwork.IsMasterClient)
+        //{
+        //    //Can't send script by RPC
+        //    PV.RPC(nameof(AddPlayerPrefabToList), RpcTarget.AllBufferedViaServer, _player.GetComponent<PlayerLife>());
+        //}
     }
 
     private void Update()
     {
-        
+        UpdateUIPlayers();
+    }
+
+    [PunRPC]
+    private void AddPlayerPrefabToList(PlayerLife _playerLife)
+    {
+        PlayersInRoom.Add(_playerLife);
     }
 
     #region UI
     [PunRPC]
-    private void CreateLifePlayerUI()
+    private void CreateLifePlayerUI(string _nickName)
     {
         //Associer le gameObject au player qui a fait spawn l'objet
-        GameObject _pUI = Instantiate(playerUI, Canvas);
-        //PhotonNetwork.CurrentRoom.Players[0].NickName;
+        //Ajouter a une liste pour le delete quand il part
+        MyPlayerUI _pUI = Instantiate(playerUIPrefab, Canvas).GetComponent<MyPlayerUI>();
+        _pUI.PlayerName.text = _nickName;
+        PlayersUIInRoom.Add(_pUI);
+    }
+
+    private void UpdateUIPlayers()
+    {
+        if (PlayersInRoom.Count > 0)
+        {
+            //Update all life bar for each players into the room
+            for (int i = 0; i < PlayersUIInRoom.Count; i++)
+            {
+                PlayersUIInRoom[i].PlayerLife.fillAmount = (float)(PlayersInRoom[i].myLife / PlayersInRoom[i].myLifeMax);
+            }
+        }
     }
     #endregion
+
 
     #region Photon CallBacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log(newPlayer.NickName + " is connected !");
+        //When a player enter into the room, create his UI (Name, life bar)
         if (PhotonNetwork.IsMasterClient)
         {
-            CreateLifePlayerUI();
+            PV.RPC(nameof(CreateLifePlayerUI), RpcTarget.AllBufferedViaServer, newPlayer.NickName);
         }
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         Debug.Log(otherPlayer.NickName + " is disconnected !");
-        //delete gameObject UI
+
+        //When a player left the room, delete his UI (Name, life bar)
+        for (int i = 0; i < PlayersUIInRoom.Count; i++)
+        {
+            if (PlayersUIInRoom[i].PlayerName.text == otherPlayer.NickName)
+            {
+                Destroy(PlayersUIInRoom[i].gameObject);
+                PlayersUIInRoom.Remove(PlayersUIInRoom[i]);
+            }
+        }
+
     }
 
     public override void OnLeftRoom()

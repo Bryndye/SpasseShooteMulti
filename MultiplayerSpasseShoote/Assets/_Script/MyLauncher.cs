@@ -7,7 +7,8 @@ using UnityEngine.UI;
 
 public class MyLauncher : MonoBehaviourPunCallbacks
 {
-    [SerializeField] GameObject controlPanel;
+    [SerializeField] GameObject panelConnectToMaster;
+    [SerializeField] GameObject panelLobby;
     [SerializeField] Text feedbackUI;
 
     private byte MaxPerPlayerPerRoom = 10;
@@ -21,11 +22,16 @@ public class MyLauncher : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
+    public void ChangeNickName(Text _name)
+    {
+        PhotonNetwork.NickName = _name.text;
+    }
+
     public void Connect()
     {
         isConnecting = true;
         feedbackUI.text = "";
-        controlPanel.SetActive(false);
+        panelConnectToMaster.SetActive(false);
 
         if (PhotonNetwork.IsConnected)
         {
@@ -45,9 +51,18 @@ public class MyLauncher : MonoBehaviourPunCallbacks
         //base.OnConnectedToMaster();
         if (isConnecting)
         {
-            feedbackUI.text = "Connected to Master : Try to connect to randomRoom";
-            PhotonNetwork.JoinRandomRoom();
+            panelLobby.SetActive(true);
+            feedbackUI.text = "Connected to Master";
+            //PhotonNetwork.JoinRandomRoom();
         }
+    }
+
+
+
+    public void JoinRandomRoom()
+    {
+        feedbackUI.text = "Connected to Master : Try to connect to randomRoom";
+        PhotonNetwork.JoinRandomRoom();
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)

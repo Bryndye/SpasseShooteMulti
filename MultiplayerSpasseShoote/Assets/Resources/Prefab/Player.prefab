@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 2806616219948364312}
   - component: {fileID: 8534860026286389323}
   - component: {fileID: 7459621513897809347}
+  - component: {fileID: 6681520490114049073}
   - component: {fileID: 2806616219948364319}
   - component: {fileID: 2806616219948364318}
   - component: {fileID: 2806616219948364313}
@@ -171,6 +172,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 7459621513897809347}
+  - {fileID: 6681520490114049073}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -190,6 +192,22 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &6681520490114049073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2806616219948364317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e7cb724808c322458aa4d15f5035fa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!50 &2806616219948364319
 Rigidbody2D:
   serializedVersion: 4

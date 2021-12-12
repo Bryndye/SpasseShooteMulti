@@ -6,8 +6,8 @@ using UnityEngine;
 public class PlayerLife : MonoBehaviour
 {
     PhotonView PV;
-    [SerializeField] int myLifeMax = 100;
-    [SerializeField] int myLife = 100;
+    public int myLifeMax = 100;
+    public int myLife = 100;
 
     private void Awake()
     {
