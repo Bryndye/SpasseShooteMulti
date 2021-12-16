@@ -28,16 +28,19 @@ public class PlayerShoot : MonoBehaviour
                 //tir RPc
                 if (timeShooting >= MyWeapon.FireRate)
                 {
-                    PV.RPC("Fire", RpcTarget.All);
+                    Fire();
+                    //PV.RPC("Fire", RpcTarget.All);
                 }
             }
         }
     }
 
-    [PunRPC]
+    //[PunRPC]
     private void Fire()
     {
-        GameObject _bullet = Instantiate(MyWeapon.Bullet, spawnBullet.position, spawnBullet.rotation);
+        GameObject _bullet = PhotonNetwork.Instantiate("Prefab/" + MyWeapon.Bullet.name, spawnBullet.position, spawnBullet.rotation);
+
+        //GameObject _bullet = Instantiate(MyWeapon.Bullet, spawnBullet.position, spawnBullet.rotation);
         _bullet.GetComponent<Player_Bullet>().ID_shooter = PV.ViewID;
 
         timeShooting = 0;

@@ -1,6 +1,5 @@
 using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,7 +8,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     //GameManager Custom
     static public GameManager Instance;
-    PhotonView PV;
+    static public PhotonView PV_GM;
 
     [Header("Prefabs/ Basics")]
     [SerializeField] private GameObject playerPrefab;
@@ -21,26 +20,29 @@ public class GameManager : MonoBehaviourPunCallbacks
     public List<PlayerLife> PlayersInRoom;
     public List<MyPlayerUI> PlayersUIInRoom;
 
+
+
     private void Awake()
     {
         Instance = this;
-        PV = GetComponent<PhotonView>();
+        PV_GM = GetComponent<PhotonView>();
     }
 
     private void Start()
     {
+
         if (!PhotonNetwork.IsConnected)
             return;
 
         if (PhotonNetwork.IsMasterClient)
         {
-            PV.RPC(nameof(CreateLifePlayerUI), RpcTarget.AllBufferedViaServer, PhotonNetwork.MasterClient.NickName);
+            PV_GM.RPC(nameof(CreateLifePlayerUI), RpcTarget.AllBufferedViaServer, PhotonNetwork.MasterClient.NickName);
         }
         InstantiatePlayerPrefab();
 
         //TEMPORAIRE
         if(PhotonNetwork.IsMasterClient)
-            PV.RPC(nameof(ItemSpawn), RpcTarget.AllBufferedViaServer);
+            PV_GM.RPC(nameof(ItemSpawn), RpcTarget.AllBufferedViaServer);
     }
 
     private void Update()
@@ -54,7 +56,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         GameObject _player = PhotonNetwork.Instantiate("Prefab/" + playerPrefab.name, Vector3.zero, Quaternion.identity);
 
-        PV.RPC(nameof(AddPlayerPrefabToList), RpcTarget.AllBufferedViaServer, _player.GetComponent<PhotonView>().ViewID);
+        PV_GM.RPC(nameof(AddPlayerPrefabToList), RpcTarget.AllBufferedViaServer, _player.GetComponent<PhotonView>().ViewID);
     }
 
     [PunRPC]
@@ -87,6 +89,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
     }
+
     #endregion
 
     #region Events
@@ -105,7 +108,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         //When a player enter into the room, create his UI (Name, life bar)
         if (PhotonNetwork.IsMasterClient)
         {
-            PV.RPC(nameof(CreateLifePlayerUI), RpcTarget.AllBufferedViaServer, newPlayer.NickName);
+            PV_GM.RPC(nameof(CreateLifePlayerUI), RpcTarget.AllBufferedViaServer, newPlayer.NickName);
         }
     }
 

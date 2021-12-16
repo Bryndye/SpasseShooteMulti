@@ -44,6 +44,8 @@ MonoBehaviour:
   - AddPlayerPrefabToList
   - SwitchWeapon
   - ItemSpawn
+  - AddMessageToTchat
+  - AddMessageToTchatForOther
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
