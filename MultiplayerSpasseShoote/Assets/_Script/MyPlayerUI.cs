@@ -7,4 +7,6 @@ public class MyPlayerUI : MonoBehaviour
 {
     public Text PlayerName;
     public Image PlayerLife;
+
+    public int Kills, Deads, Assists, Score;
 }

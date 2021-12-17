@@ -42,8 +42,8 @@ public class Player_Bullet : MonoBehaviour
                 if (ID_shooter != _pv.ViewID)
                 {
                     _pv.RPC(nameof(_life.TakeDamage), RpcTarget.AllViaServer, Damage, ID_shooter ,PhotonNetwork.NickName);
-                    //_life.TakeDamage(Damage);
-                    PhotonNetwork.Destroy(PV); //CAN'T DESTROY THIS GAMEOBJECT BUT IDK WHY
+
+                    PhotonNetwork.Destroy(PV);
                 }
             }
         }

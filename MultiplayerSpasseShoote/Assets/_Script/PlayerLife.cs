@@ -20,7 +20,7 @@ public class PlayerLife : MonoBehaviour
     public void TakeDamage(int _dmg, int _ID, string _nickName)
     {
         string _nameKiller = PhotonView.Find(_ID).name;
-        Debug.LogFormat( "{0} damages by {1} !", _dmg, _nickName);
+        //Debug.LogFormat( "{0} damages by {1} !", _dmg, _nickName);
         myLife -= _dmg;
 
         if (myLife <= 0)
@@ -31,12 +31,12 @@ public class PlayerLife : MonoBehaviour
 
     private void Death(string _nameKiller)
     {
-        string _message = " dead by " + _nameKiller + " !";
-        string _playerName = PhotonNetwork.NickName;
-        Debug.Log(_playerName + _message);
+        //Debug.Log(_playerName + _message);
         if(PV.IsMine)
-            Tchat.PV_Tchat.RPC(nameof(Tchat.AddMessageToTchat), RpcTarget.MasterClient, 
-            _playerName, _message);
+            Tchat.PV_Tchat.RPC(nameof(Tchat.AddMessageToTchat), RpcTarget.AllViaServer,
+            PhotonNetwork.NickName, "killed ", _nameKiller);
+
+        //Make fct respawn
         myLife = myLifeMax;
     }
 }

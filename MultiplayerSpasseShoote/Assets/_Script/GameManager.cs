@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     static public GameManager Instance;
     static public PhotonView PV_GM;
 
+    private PhotonView pv_Tchat;
+
     [Header("Prefabs/ Basics")]
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject playerUIPrefab;
@@ -30,6 +32,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        pv_Tchat = Tchat.PV_Tchat;
 
         if (!PhotonNetwork.IsConnected)
             return;
@@ -56,16 +59,21 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         GameObject _player = PhotonNetwork.Instantiate("Prefab/" + playerPrefab.name, Vector3.zero, Quaternion.identity);
 
-        PV_GM.RPC(nameof(AddPlayerPrefabToList), RpcTarget.AllBufferedViaServer, _player.GetComponent<PhotonView>().ViewID);
+        PV_GM.RPC(nameof(AddPlayerPrefabToList), RpcTarget.AllBufferedViaServer, 
+            _player.GetComponent<PhotonView>().ViewID, PhotonNetwork.NickName);
     }
 
     [PunRPC]
-    private void AddPlayerPrefabToList(int _ID)
+    private void AddPlayerPrefabToList(int _ID, string _nickName)
     {
-        PlayersInRoom.Add(PhotonView.Find(_ID).GetComponent<PlayerLife>());
+        //Prevoir de recup dabord le PV puis le PlayerLife
+        GameObject _playerInstance = PhotonView.Find(_ID).gameObject;
+        _playerInstance.name = _nickName;
+        PlayersInRoom.Add(_playerInstance.GetComponent<PlayerLife>());
     }
 
     #endregion
+
 
     #region UI
     [PunRPC]
@@ -92,6 +100,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     #endregion
 
+
     #region Events
     [PunRPC]
     private void ItemSpawn()
@@ -101,10 +110,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
+
     #region Photon CallBacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.Log(newPlayer.NickName + " is connected !");
+        //Debug.Log(newPlayer.NickName + " is connected !");
+        pv_Tchat.RPC(nameof(Tchat.AddMessageToTchat), 
+            RpcTarget.All, newPlayer.NickName, " joinned the room !", null);
+
         //When a player enter into the room, create his UI (Name, life bar)
         if (PhotonNetwork.IsMasterClient)
         {
@@ -114,7 +127,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        Debug.Log(otherPlayer.NickName + " is disconnected !");
+        //Debug.Log(otherPlayer.NickName + " is disconnected !");
+        pv_Tchat.RPC(nameof(Tchat.AddMessageToTchat), 
+            RpcTarget.All, otherPlayer.NickName, " left the room !", null);
 
         //When a player left the room, delete his UI (Name, life bar)
         for (int i = 0; i < PlayersUIInRoom.Count; i++)
