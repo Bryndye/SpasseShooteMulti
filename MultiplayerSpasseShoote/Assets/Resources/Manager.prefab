@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4373286635548488690}
   - component: {fileID: 4373286636224042701}
   - component: {fileID: 5036796894422532145}
+  - component: {fileID: 3296503165735507485}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -70,10 +71,14 @@ MonoBehaviour:
   playerPrefab: {fileID: 2806616219948364317, guid: 188f0eafbbdaea24faf988e71765cabc, type: 3}
   playerUIPrefab: {fileID: 7880593414058152943, guid: 2a90805f0b962ad4589bee2c512bf04b, type: 3}
   Canvas: {fileID: 0}
-  spawnsPlayer: []
+  spawnsPlayer:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   PlayersInRoom: []
   PlayersUIInRoom: []
-  tchat: {fileID: 0}
 --- !u!114 &5036796894422532145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,3 +91,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e2df1372fc4f6149b40e01b610f93e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tchat: {fileID: 0}
+--- !u!114 &3296503165735507485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4373286636224042700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93ca8cbece7a04449aeee233f4a3549f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AllScoresPlayers: []

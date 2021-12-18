@@ -5,6 +5,7 @@ using TMPro;
 
 public class Tchat : MonoBehaviour
 {
+    public static Tchat Instance;
     public static PhotonView PV_Tchat;
 
     [Header("UI tchat")]
@@ -12,6 +13,7 @@ public class Tchat : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         PV_Tchat = GetComponent<PhotonView>();      
     }
 
@@ -19,11 +21,11 @@ public class Tchat : MonoBehaviour
     {
         tchat.text = null;
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PV_Tchat.RPC(nameof(AddMessageToTchat), RpcTarget.MasterClient,
-                PhotonNetwork.NickName, "a tué rien...", null);
-        }
+        //if (PhotonNetwork.IsMasterClient) //Test call logs message
+        //{
+        //    PV_Tchat.RPC(nameof(AddMessageToTchat), RpcTarget.MasterClient,
+        //        PhotonNetwork.NickName, "a tué rien...", null);
+        //}
     }
 
     [PunRPC]

@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     static public PhotonView PV_GM;
 
     private PhotonView pv_Tchat;
+    Tchat tchat;
 
     [Header("Prefabs/ Basics")]
     [SerializeField] private GameObject playerPrefab;
@@ -33,19 +34,20 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         pv_Tchat = Tchat.PV_Tchat;
+        tchat = Tchat.Instance;
 
         if (!PhotonNetwork.IsConnected)
             return;
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PV_GM.RPC(nameof(CreateLifePlayerUI), RpcTarget.AllBufferedViaServer, PhotonNetwork.MasterClient.NickName);
-        }
+        //if (PhotonNetwork.IsMasterClient)
+        //{
+        //    PV_GM.RPC(nameof(CreateLifePlayerUI), RpcTarget.AllBufferedViaServer, PhotonNetwork.NickName, _ID);
+        //}
         InstantiatePlayerPrefab();
 
         //TEMPORAIRE
         if(PhotonNetwork.IsMasterClient)
-            PV_GM.RPC(nameof(ItemSpawn), RpcTarget.AllBufferedViaServer);
+            PV_GM.RPC(nameof(ItemSpawn), RpcTarget.All);
     }
 
     private void Update()
@@ -58,9 +60,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void InstantiatePlayerPrefab()
     {
         GameObject _player = PhotonNetwork.Instantiate("Prefab/" + playerPrefab.name, Vector3.zero, Quaternion.identity);
-
+        int _ID = _player.GetComponent<PhotonView>().ViewID;
         PV_GM.RPC(nameof(AddPlayerPrefabToList), RpcTarget.AllBufferedViaServer, 
-            _player.GetComponent<PhotonView>().ViewID, PhotonNetwork.NickName);
+            _ID, PhotonNetwork.NickName);
+
+        PV_GM.RPC(nameof(CreateLifePlayerUI), RpcTarget.AllBufferedViaServer, PhotonNetwork.NickName, _ID);
     }
 
     [PunRPC]
@@ -77,11 +81,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     #region UI
     [PunRPC]
-    private void CreateLifePlayerUI(string _nickName)
+    private void CreateLifePlayerUI(string _nickName, int _ID)
     {
         //Associer le gameObject au player qui a fait spawn l'objet
         //Ajouter a une liste pour le delete quand il part
         MyPlayerUI _pUI = Instantiate(playerUIPrefab, Canvas).GetComponent<MyPlayerUI>();
+        _pUI.PV = PhotonView.Find(_ID);
         _pUI.PlayerName.text = _nickName;
         PlayersUIInRoom.Add(_pUI);
     }
@@ -115,21 +120,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         //Debug.Log(newPlayer.NickName + " is connected !");
-        pv_Tchat.RPC(nameof(Tchat.AddMessageToTchat), 
-            RpcTarget.All, newPlayer.NickName, " joinned the room !", null);
-
-        //When a player enter into the room, create his UI (Name, life bar)
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PV_GM.RPC(nameof(CreateLifePlayerUI), RpcTarget.AllBufferedViaServer, newPlayer.NickName);
-        }
+        tchat.AddMessageToTchat(newPlayer.NickName, " joinned the room !", null);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         //Debug.Log(otherPlayer.NickName + " is disconnected !");
-        pv_Tchat.RPC(nameof(Tchat.AddMessageToTchat), 
-            RpcTarget.All, otherPlayer.NickName, " left the room !", null);
+        tchat.AddMessageToTchat(otherPlayer.NickName, " left the room !", null);
 
         //When a player left the room, delete his UI (Name, life bar)
         for (int i = 0; i < PlayersUIInRoom.Count; i++)

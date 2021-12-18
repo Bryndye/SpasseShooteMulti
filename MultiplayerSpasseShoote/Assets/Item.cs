@@ -17,17 +17,22 @@ public class Item : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out PlayerShoot _playerShoot))
+        if (collision.TryGetComponent(out PhotonView _pv) && collision.TryGetComponent(out PlayerShoot _playerShoot))
         {
             newOwner = _playerShoot;
-            PV.RPC(nameof(SwitchWeapon), RpcTarget.OthersBuffered);
+            PV.RPC(nameof(SwitchWeapon), RpcTarget.All, _pv.ViewID);
         }
     }
 
     [PunRPC]
-    private void SwitchWeapon()
+    private void SwitchWeapon(int _ID)
     {
-        newOwner.MyWeapon = WeaponItem;
+        PlayerShoot _ps = PhotonView.Find(_ID).GetComponent<PlayerShoot>();
+        _ps.MyWeapon = WeaponItem;
+        if (PV.IsMine)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
         //PhotonNetwork.Destroy(PV); CAN'T DESTROY THIS GAMEOBJECT BUT IDK WHY
     }
 }

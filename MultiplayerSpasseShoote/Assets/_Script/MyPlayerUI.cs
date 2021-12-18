@@ -1,12 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MyPlayerUI : MonoBehaviour
 {
-    public Text PlayerName;
+    public PhotonView PV;
+    public PlayerScore MyPlayerScore;
+    public Text PlayerName, AllScores;
     public Image PlayerLife;
 
-    public int Kills, Deads, Assists, Score;
+    private void Start()
+    {
+        MyPlayerScore = PV.GetComponent<PlayerScore>();
+    }
+
+    private void Update()
+    {
+        AllScores.text = "K: "+ MyPlayerScore.Kills + " D: " + MyPlayerScore.Deads + " A: " + MyPlayerScore.Assists
+            + "\nScores: " + MyPlayerScore.Score;
+    }
 }

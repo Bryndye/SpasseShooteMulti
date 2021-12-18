@@ -29,13 +29,11 @@ public class PlayerShoot : MonoBehaviour
                 if (timeShooting >= MyWeapon.FireRate)
                 {
                     Fire();
-                    //PV.RPC("Fire", RpcTarget.All);
                 }
             }
         }
     }
 
-    //[PunRPC]
     private void Fire()
     {
         GameObject _bullet = PhotonNetwork.Instantiate("Prefab/" + MyWeapon.Bullet.name, spawnBullet.position, spawnBullet.rotation);

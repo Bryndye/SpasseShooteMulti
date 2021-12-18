@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 2806616219948364313}
   - component: {fileID: 2923924027155251061}
   - component: {fileID: 1519741838823351771}
+  - component: {fileID: 4151852033780302729}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -286,3 +287,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myLifeMax: 100
   myLife: 100
+--- !u!114 &4151852033780302729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2806616219948364317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 574bd4ffe06ce3b46bb878e46d914683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Kills: 0
+  Deads: 0
+  Assists: 0
+  Score: 0

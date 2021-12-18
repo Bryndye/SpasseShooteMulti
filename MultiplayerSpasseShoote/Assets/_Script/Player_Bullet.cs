@@ -35,17 +35,13 @@ public class Player_Bullet : MonoBehaviour
         {
             return;
         }
-        if (collision.TryGetComponent(out PlayerLife _life))
+        if (collision.TryGetComponent(out PlayerLife _life) && _life.TryGetComponent(out PhotonView _pv))
         {
-            if (_life.TryGetComponent(out PhotonView _pv))
+            if (ID_shooter != _pv.ViewID)
             {
-                if (ID_shooter != _pv.ViewID)
-                {
-                    _pv.RPC(nameof(_life.TakeDamage), RpcTarget.AllViaServer, Damage, ID_shooter ,PhotonNetwork.NickName);
-
-                    PhotonNetwork.Destroy(PV);
-                }
+                _pv.RPC(nameof(_life.TakeDamage), RpcTarget.All, Damage, ID_shooter);
             }
         }
+        PhotonNetwork.Destroy(PV);
     }
 }
