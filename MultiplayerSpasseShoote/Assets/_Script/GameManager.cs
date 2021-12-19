@@ -39,10 +39,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsConnected)
             return;
 
-        //if (PhotonNetwork.IsMasterClient)
-        //{
-        //    PV_GM.RPC(nameof(CreateLifePlayerUI), RpcTarget.AllBufferedViaServer, PhotonNetwork.NickName, _ID);
-        //}
+        Debug.LogFormat("NameRoom : {0} MaxPlayers : {1}", PhotonNetwork.CurrentRoom.Name,PhotonNetwork.CurrentRoom.MaxPlayers);
+
         InstantiatePlayerPrefab();
 
         //TEMPORAIRE
