@@ -22,6 +22,11 @@ public class MyLauncher : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
+    private void Start()
+    {
+        Connect();
+    }
+
     public void ChangeNickName(Text _name)
     {
         PhotonNetwork.NickName = _name.text;
@@ -33,17 +38,21 @@ public class MyLauncher : MonoBehaviourPunCallbacks
         feedbackUI.text = "";
         panelConnectToMaster.SetActive(false);
 
-        if (PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.JoinRandomRoom();
-            feedbackUI.text = "Join random room...";
-        }
-        else
-        {
-            PhotonNetwork.ConnectUsingSettings();
-            PhotonNetwork.GameVersion = GameVersion;
-            feedbackUI.text = "Connecting...";
-        }
+        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.GameVersion = GameVersion;
+        feedbackUI.text = "Connecting...";
+
+        //if (PhotonNetwork.IsConnected)
+        //{
+        //    PhotonNetwork.JoinRandomRoom();
+        //    feedbackUI.text = "Join random room...";
+        //}
+        //else
+        //{
+        //    PhotonNetwork.ConnectUsingSettings();
+        //    PhotonNetwork.GameVersion = GameVersion;
+        //    feedbackUI.text = "Connecting...";
+        //}
     }
 
     public override void OnConnectedToMaster()
