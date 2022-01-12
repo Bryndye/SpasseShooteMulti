@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
     #region Photon CallBacks
-    public override void OnPlayerEnteredRoom(PlayerData newPlayer)
+    public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         //Debug.Log(newPlayer.NickName + " is connected !");
         tchat.AddMessage(newPlayer.NickName, " joinned the room !");
@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         //Debug.Log(otherPlayer.NickName + " is disconnected !");
-        tchat.AddMessageToTchat(otherPlayer.NickName, " left the room !", null);
+        tchat.AddMessage(otherPlayer.NickName, " left the room !");
 
         //When a player left the room, delete his UI (Name, life bar)
         for (int i = 0; i < PlayersUIInRoom.Count; i++)

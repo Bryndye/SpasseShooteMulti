@@ -15,11 +15,11 @@ MonoBehaviour:
   AppSettings:
     AppIdRealtime: 614dffe4-6b27-473c-a099-44050b160c72
     AppIdFusion: 
-    AppIdChat: c093d711-8dc9-42ba-ad35-355a0c37baf5
+    AppIdChat: 
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: eu
+    FixedRegion: 
     Server: 
     Port: 0
     ProxyServer: 
@@ -28,28 +28,26 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: za
+  DevRegion: 
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - AddMessage
+  - AddMessageKill
+  - AddPlayerPrefabToList
+  - AddScore
   - ClickRpc
+  - CreateLifePlayerUI
   - DestroyRpc
   - DestroySpaceship
   - Fire
-  - RespawnSpaceship
-  - TakeDamage
-  - CreateLifePlayerUI
-  - AddPlayerPrefabToList
-  - SwitchWeapon
   - ItemSpawn
-  - AddMessageToTchat
-  - AddMessageToTchatForOther
-  - AddScore
+  - RespawnSpaceship
   - SetLifeForOther
-  - AddMessage
-  - AddMessageKill
+  - SwitchWeapon
+  - TakeDamage
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
