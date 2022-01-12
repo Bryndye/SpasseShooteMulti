@@ -17,4 +17,5 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scenes/DemoAsteroids-LobbyScene.unity
     guid: c8a9d1312a49dc8488a9b32d83d659c7
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: e403cdbb8e60ebd41b7efd51c16b0a00, type: 2}

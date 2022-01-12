@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Teams { NoTeam, Blue, Red }
 public class Pun_Score : MonoBehaviour
 {
     public List<PlayerScore> AllScoresPlayers;
@@ -24,3 +25,4 @@ public class Pun_Score : MonoBehaviour
 
     //}
 }
+

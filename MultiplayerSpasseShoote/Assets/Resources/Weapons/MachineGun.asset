@@ -15,3 +15,4 @@ MonoBehaviour:
   Bullet: {fileID: 8963332845460435145, guid: d25c60c38f8ddee4eb41112376c9a85a, type: 3}
   Damage: 3
   FireRate: 0.3
+  IconWeapon: {fileID: 21300000, guid: 936345f7fc3934efa8119a8700d904c7, type: 3}

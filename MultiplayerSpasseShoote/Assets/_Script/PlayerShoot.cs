@@ -22,19 +22,14 @@ public class PlayerShoot : MonoBehaviour
         if (PV.IsMine)
         {
             timeShooting += Time.deltaTime;
-
-            if (Input.GetAxis("Fire1") > 0)
+            if (Input.GetAxis("Fire1") > 0 && timeShooting > MyWeapon.FireRate)
             {
-                //tir RPc
-                if (timeShooting >= MyWeapon.FireRate)
-                {
-                    Fire();
-                }
+                Fire();
             }
         }
     }
 
-    private void Fire()
+    public void Fire()
     {
         GameObject _bullet = PhotonNetwork.Instantiate("Prefab/" + MyWeapon.Bullet.name, spawnBullet.position, spawnBullet.rotation);
 

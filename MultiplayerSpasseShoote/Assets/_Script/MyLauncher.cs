@@ -11,8 +11,6 @@ public class MyLauncher : MonoBehaviourPunCallbacks
     public string GameVersion = "1";
 
     [Header("Menu general")]
-    [SerializeField] GameObject panelConnectToMaster;
-    [SerializeField] GameObject panelLobby;
     [SerializeField] Text feedbackUI;
     public UnityEvent EnterGame;
     public UnityEvent EnterLobby;

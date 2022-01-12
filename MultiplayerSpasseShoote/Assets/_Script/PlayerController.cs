@@ -30,8 +30,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void PlayerLookAtMouse()
+    public void PlayerLookAtMouse()
     {
+
         var dir = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0,0, angle +90);

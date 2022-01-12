@@ -79,6 +79,7 @@ MonoBehaviour:
   - {fileID: 0}
   PlayersInRoom: []
   PlayersUIInRoom: []
+  PlayersScore: []
 --- !u!114 &5036796894422532145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,6 +93,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tchat: {fileID: 0}
+  logParent: {fileID: 0}
+  prefabLog: {fileID: 2544859701809221599, guid: 5574f43951df7ca4a9c9ccc0589bcd7b, type: 3}
+  teamColor: {fileID: 11400000, guid: 4106a31e6477f6c4aa41407b10e8dad9, type: 2}
+  ListLogsInstance: []
 --- !u!114 &3296503165735507485
 MonoBehaviour:
   m_ObjectHideFlags: 0

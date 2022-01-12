@@ -6,7 +6,21 @@ using UnityEngine;
 public enum ScoreStat { Kill, Dead, Assist, Score}
 public class PlayerScore : MonoBehaviour
 {
+    public Teams MyTeam = Teams.NoTeam;
     public int Kills, Deads, Assists, Score;
+
+    [SerializeField] SpriteRenderer outlineSpriteTeam;
+    [SerializeField] TeamColor teamColor;
+
+    private void Start()
+    {
+        //Set color Team TEMP !!!!!!!
+        if (PhotonNetwork.NickName == null)
+        {
+            PhotonNetwork.NickName = "Blayer" + Random.Range(0,1000);
+        }
+        outlineSpriteTeam.color = teamColor.SetColorTeam(MyTeam, GetComponent<PhotonView>().IsMine);
+    }
 
     [PunRPC]
     public void AddScore(ScoreStat _chooseStat, int _stat)

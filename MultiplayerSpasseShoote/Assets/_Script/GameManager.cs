@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [Header("Lists Players items")]
     public List<PlayerLife> PlayersInRoom;
     public List<MyPlayerUI> PlayersUIInRoom;
-
+    public List<PlayerScore> PlayersScore;
 
 
     private void Awake()
@@ -115,10 +115,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
     #region Photon CallBacks
-    public override void OnPlayerEnteredRoom(Player newPlayer)
+    public override void OnPlayerEnteredRoom(PlayerData newPlayer)
     {
         //Debug.Log(newPlayer.NickName + " is connected !");
-        tchat.AddMessageToTchat(newPlayer.NickName, " joinned the room !", null);
+        tchat.AddMessage(newPlayer.NickName, " joinned the room !");
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)

@@ -17,43 +17,65 @@ public class PlayerLife : MonoBehaviour
         PV = GetComponent<PhotonView>();
         myPlayerScore = GetComponent<PlayerScore>();
         myLife = myLifeMax;
+
+        myOriginalColor = mySprite.color;
     }
 
 
     [PunRPC]
     public void TakeDamage(int _dmg, int _ID)
     {
+        if (!isAnimDmg)
+            StartCoroutine(HitEffect());
+
         if (!PV.IsMine)
         {
             return;
         }
-        string _nameKiller = PhotonView.Find(_ID).name;
+
         //Debug.LogFormat( "{0} damages by {1} !", _dmg, _nickName);
         myLife -= _dmg;
 
         if (myLife <= 0)
         {
-            Death(_nameKiller, _ID);
+            Death(_ID);
         }
         PV.RPC(nameof(SetLifeForOther), RpcTarget.OthersBuffered, myLife);
     }
+
+    public SpriteRenderer mySprite;
+    Color myOriginalColor;
+    bool isAnimDmg;
+    private IEnumerator HitEffect()
+    {
+        isAnimDmg = true;
+        mySprite.color = Color.white;
+
+        yield return new WaitForSeconds(0.1f);
+        mySprite.color = myOriginalColor;
+        isAnimDmg = false;
+    }
+
 
     [PunRPC]
     private void SetLifeForOther(int _life)
     {
         myLife = _life;
     }
-    private void Death(string _nameKiller, int _ID)
+
+
+
+    private void Death(int _IdKiller)
     {
         //Debug.Log(_playerName + _message);
 
         PV.RPC(nameof(PlayerScore.AddScore), RpcTarget.AllBufferedViaServer,
             ScoreStat.Dead, 1);
-        PhotonView.Find(_ID).RPC(nameof(PlayerScore.AddScore), RpcTarget.AllBufferedViaServer,
+        PhotonView.Find(_IdKiller).RPC(nameof(PlayerScore.AddScore), RpcTarget.AllBufferedViaServer,
             ScoreStat.Kill, 1);
 
-        Tchat.PV_Tchat.RPC(nameof(Tchat.AddMessageToTchat), RpcTarget.All,
-            PhotonNetwork.NickName, "killed ", _nameKiller);
+        Tchat.PV_Tchat.RPC(nameof(Tchat.AddMessageKill), RpcTarget.All,
+           _IdKiller ,"killed " ,PV.ViewID);
 
         RespawnPlayer();
     }
